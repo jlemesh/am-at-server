@@ -3,6 +3,7 @@ import six
 
 from swagger_server.models.user import User  # noqa: E501
 from swagger_server import util
+from swagger_server.database.user import UserDataProvider
 
 
 def add_friend(id):  # noqa: E501
@@ -48,7 +49,7 @@ def delete_friend(id, friend_id):  # noqa: E501
     return 'do some magic!'
 
 
-def get_user(id):  # noqa: E501
+def get_user(id_):  # noqa: E501
     """returns user info
 
     Get user info  # noqa: E501
@@ -58,7 +59,7 @@ def get_user(id):  # noqa: E501
 
     :rtype: User
     """
-    return 'do some magic!'
+    return UserDataProvider().get_user(id_)
 
 
 def get_user_friends(id, name=None):  # noqa: E501
@@ -90,7 +91,7 @@ def get_users(skip=None, limit=None, name=None):  # noqa: E501
 
     :rtype: List[User]
     """
-    return 'do some magic!'
+    return UserDataProvider().get_users()
 
 
 def update_user(id, body=None):  # noqa: E501

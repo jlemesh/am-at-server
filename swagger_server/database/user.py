@@ -9,7 +9,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32))
     email = db.Column(db.String(32))
-    photo_url = db.Column(db.String(32))
+    photo_url = db.Column(db.String(255))
     status = db.Column(db.String(32))
 
     def __repr__(self):
@@ -39,7 +39,7 @@ class UserDataProvider:
         db.session.commit()
 
         return self.data_to_model(user)
-    
+
     def update_user(self, id, model):
         user = User.query.get(id)
         if model.name:

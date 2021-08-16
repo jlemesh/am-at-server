@@ -6,6 +6,9 @@ from swagger_server import util
 from swagger_server.database.user import UserDataProvider
 
 
+user_provider = UserDataProvider()
+
+
 def add_friend(id):  # noqa: E501
     """adds a friend
 
@@ -31,7 +34,8 @@ def add_user(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    return user_provider.create_user(body)
 
 
 def delete_friend(id, friend_id):  # noqa: E501
@@ -59,7 +63,7 @@ def get_user(id_):  # noqa: E501
 
     :rtype: User
     """
-    return UserDataProvider().get_user(id_)
+    return user_provider.get_user(id_)
 
 
 def get_user_friends(id, name=None):  # noqa: E501
@@ -91,10 +95,10 @@ def get_users(skip=None, limit=None, name=None):  # noqa: E501
 
     :rtype: List[User]
     """
-    return UserDataProvider().get_users()
+    return user_provider.get_users()
 
 
-def update_user(id, body=None):  # noqa: E501
+def update_user(id_, body=None):  # noqa: E501
     """updates user info
 
     Update user info  # noqa: E501
@@ -108,4 +112,5 @@ def update_user(id, body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    return user_provider.update_user(id_, body)

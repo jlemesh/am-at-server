@@ -18,29 +18,55 @@ class User(db.Model):
 
 class UserDataProvider:
     def get_users(self):
-        user_objets = User.query.all()
-        data = []
+        user_objects = User.query.all()
+        users = []
 
-        for user_object in user_objets:
-            data.append(
-                user.User(
-                    id=user_object.id,
-                    name=user_object.name,
-                    email=user_object.email,
-                    photo_url=user_object.photo_url,
-                    status=user_object.status
-                )
+        for user_object in user_objects:
+            users.append(
+                self.data_to_model(user_object)
             )
 
-        return data
-    
+        return users
+
     def get_user(self, id):
         user_object = User.query.get(id)
 
+        return self.data_to_model(user_object)
+
+    def create_user(self, model):
+        user = self.model_to_data(model)
+        db.session.add(user)
+        db.session.commit()
+
+        return self.data_to_model(user)
+    
+    def update_user(self, id, model):
+        user = User.query.get(id)
+        if model.name:
+            user.name = model.name
+        if model.email:
+            user.email = model.email
+        if model.status:
+            user.status = model.status
+        if model.photo_url:
+            user.photo_url = model.photo_url
+        db.session.commit()
+
+        return self.data_to_model(user)
+
+    def data_to_model(self, data):
         return user.User(
-            id=user_object.id,
-            name=user_object.name,
-            email=user_object.email,
-            photo_url=user_object.photo_url,
-            status=user_object.status
+            id=data.id,
+            name=data.name,
+            email=data.email,
+            photo_url=data.photo_url,
+            status=data.status
+        )
+
+    def model_to_data(self, model):
+        return User(
+            name=model.name,
+            email=model.email,
+            photo_url=model.photo_url,
+            status=model.status
         )

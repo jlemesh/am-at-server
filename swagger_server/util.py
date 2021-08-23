@@ -1,9 +1,15 @@
 import datetime
 
 import six
-import typing
 from swagger_server import type_util
+from werkzeug.exceptions import Unauthorized
 
+from jose import JWTError, jwt
+
+JWT_ISSUER = 'com.zalando.connexion'
+JWT_SECRET = 'change_this'
+JWT_LIFETIME_SECONDS = 600
+JWT_ALGORITHM = 'HS256'
 
 def _deserialize(data, klass):
     """Deserializes dict, list, str into an object.
@@ -140,3 +146,9 @@ def _deserialize_dict(data, boxed_type):
     """
     return {k: _deserialize(v, boxed_type)
             for k, v in six.iteritems(data)}
+
+def decode_token(token):
+    try:
+        return jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+    except JWTError as e:
+        six.raise_from(Unauthorized, e)

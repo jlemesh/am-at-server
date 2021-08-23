@@ -193,6 +193,8 @@ paths:
       tags:
       - users
       summary: adds a friend
+      security:
+      - jwt: ['secret']
       description: Become user's friend
       operationId: add_friend
       parameters:
@@ -441,6 +443,26 @@ paths:
         "404":
           description: item not found
       x-openapi-router-controller: swagger_server.controllers.groups_controller
+  /login:
+    post:
+      summary: Log user in
+      tags:
+      - auth
+      operationId: login
+      responses:
+        '200':
+          description: JWT token
+          content:
+            'text/plain':
+              schema:
+                type: string
+      requestBody:
+        description: User auth credentials
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user_credentials'
+      x-openapi-router-controller: swagger_server.controllers.auth_controller
 components:
   schemas:
     User:
@@ -502,4 +524,19 @@ components:
       properties:
         id:
           type: integer
-
+    user_credentials:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: swagger_server.util.decode_token

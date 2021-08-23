@@ -1,5 +1,6 @@
 import connexion
 import six
+from swagger_server.models import user
 
 from swagger_server.models.user import User  # noqa: E501
 from swagger_server import util
@@ -9,7 +10,7 @@ from swagger_server.database.user import UserDataProvider
 user_provider = UserDataProvider()
 
 
-def add_friend(id):  # noqa: E501
+def add_friend(user, token_info, id_):  # noqa: E501
     """adds a friend
 
     Become user&#x27;s friend # noqa: E501
@@ -19,7 +20,7 @@ def add_friend(id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return user_provider.add_friend(user, id_)
 
 
 def add_user(body=None):  # noqa: E501
@@ -66,7 +67,7 @@ def get_user(id_):  # noqa: E501
     return user_provider.get_user(id_)
 
 
-def get_user_friends(id, name=None):  # noqa: E501
+def get_user_friends(id_, name=None):  # noqa: E501
     """returns user friends
 
     Get user friends  # noqa: E501
@@ -78,7 +79,7 @@ def get_user_friends(id, name=None):  # noqa: E501
 
     :rtype: List[User]
     """
-    return 'do some magic!'
+    return user_provider.get_friends(id_)
 
 
 def get_users(skip=None, limit=None, name=None):  # noqa: E501

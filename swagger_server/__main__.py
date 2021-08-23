@@ -4,7 +4,6 @@ import connexion
 import os
 
 from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
 from swagger_server.config import app, db
 from swagger_server import encoder
 
@@ -25,7 +24,6 @@ class Application:
         connex_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
         self.db = SQLAlchemy(connex_app)
-        self.ma = Marshmallow(connex_app)
 
     def run(self):
         self.app.run(port=8080, debug=True)
